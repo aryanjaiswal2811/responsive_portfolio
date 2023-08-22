@@ -1,0 +1,150 @@
+// Menu Button
+.menu-btn {
+  position: absolute;
+  z-index: 3; //a higher z-index for layering
+  right: 35px;
+  top: 35px;
+  cursor: pointer;
+  @include easeOut;
+  //In CSS, top and right are properties used to position an element within its containing element. 
+  //These properties are commonly used when applying the position: absolute; or position: fixed; property to an element.
+  .btn-line {
+    width: 28px;
+    height: 3px;
+    margin: 0 0 5px 0;
+    background: set-text-color($primary-color);
+    @include easeOut;
+  }
+
+  // Rotating into X With Menu Lines
+  &.close { // this class will be made when user clicks the menu button
+    transform: rotate(180deg);
+
+    .btn-line {
+      // Here we are making our menu button transform to form a X(cross) when  clicked
+      // Line 1 - Rotate
+      &:nth-child(1) { //nth-child(1) selects the first child element of its parent.
+        transform: rotate(45deg) translate(5px, 5px); // repositioning
+      }
+      // translate :  the translate() function is used to move an element in a 2D space, 
+      // either horizontally or vertically, or both. 
+      // It's a transformation function that allows you to adjust the position of an element
+      //  without affecting the normal flow of the document.
+
+      // Line 2 - Hide
+      &:nth-child(2) {
+        opacity: 0; // hides the second line
+      }
+
+      // Line 3 - Rotate
+      &:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+      }
+    }
+  }
+}
+
+// Menu Overlay
+.menu {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  opacity: 0.9;
+  visibility: hidden; // by default it will be hidden as we dont want to show links or anything
+
+  &.show {
+    visibility: visible;
+  }
+
+  &-branding, // this means menu-branding. Insted of writing it as a whole we are using the '&' symbol
+  &-nav {
+    display: flex;
+    flex-flow: column wrap; 
+    align-items: center; // vertically centers the child elements within the container
+    justify-content: center; // horizontally centers the child elements within the container
+    float: left;
+    width: 50%;
+    height: 100vh;
+    overflow: hidden; // as we dont need scrollbar
+  }
+
+  &-nav {
+    margin: 0;
+    padding: 0;
+    background: darken($primary-color, 5);
+    /*darken(): This is a function in Sass or SCSS that takes two arguments. 
+    The first argument is the base color, and the second argument is a percentage value indicating how much 
+    darker the color should become.
+    5: This value, in this case, is the amount by which the color should be darkened. 
+    It's usually expressed as a percentage. So, 5 means the color will be darkened by 5%.*/
+    list-style: none; // removes the bulleted points from navigational items
+    transform: translate3d(0, -100%, 0);
+    @include easeOut;
+
+    &.show {
+      // Slide in from top
+      transform: translate3d(0, 0, 0);
+      /*
+      transform: translate3d() is a CSS property that is used to move an element in 3D space using 
+      a 3D translation.*/
+    }
+  }
+
+  // Branding Side
+  &-branding {
+    background: $primary-color;
+    transform: translate3d(0, 100%, 0);
+    @include easeOut;
+
+    &.show {
+      // Slide in from bottom
+      transform: translate3d(0, 0, 0);
+    }
+
+    .portrait {
+      width: 250px;
+      height: 250px;
+      background: url('../img/portrait.jpg');
+      border-radius: 50%;
+      border: solid 3px $secondary-color;
+    }
+  }
+
+  .nav-item {
+    transform: translate3d(600px, 0, 0);
+    @include easeOut;
+
+    &.show {
+      // Slide in from right
+      transform: translate3d(0, 0, 0);
+    }
+
+    &.current > a {
+      color: $secondary-color;
+    }
+  }
+
+  .nav-link {
+    display: inline-block;
+    position: relative;
+    font-size: 30px;
+    text-transform: uppercase;
+    padding: 1rem 0;
+    font-weight: 300;
+    color: set-text-color($primary-color);
+    text-decoration: none;
+    @include easeOut;
+
+    &:hover {
+      color: $secondary-color;
+    }
+  }
+}
+
+// Delay each nav item slide by 0.1s
+@for $x from 1 through 4 { // running a loop through nav items
+  .nav-item:nth-child(#{$x}) { // # -> number sign  {} -> template literals
+    transition-delay: $x * 0.1s; // for 1st child -> 1*0.1s , for 2nd child -> 2*0.1s
+    // As we dont want all of them to be delayed by 0.1s as we dont want them to come all together at once
+  }
+}
